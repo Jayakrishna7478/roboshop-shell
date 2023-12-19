@@ -5,7 +5,6 @@ R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
-MONGDB_HOST=mongodb.kubernete.online #give mongodb IP
 
 TIMESTAMP=$(date +%F-%H-%M-%S)
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
@@ -55,44 +54,32 @@ mkdir -p /app
 
 VALIDATE $? "createing app director"
 
-curl -o /tmp/user.zip https://roboshop-builds.s3.amazonaws.com/user.zip &>> $LOGFILE
+curl -o /tmp/cart.zip https://roboshop-builds.s3.amazonaws.com/cart.zip &>> $LOGFILE
 
-VALIDATE $? "Downloading user application"
+VALIDATE $? "Downloading cart application"
 
 cd /app
 
-unzip -o /tmp/user.zip &>> $LOGFILE
+unzip -o /tmp/cart.zip &>> $LOGFILE
 
-VALIDATE $? "unziping user"
+VALIDATE $? "unziping cart"
 
 npm install &>> $LOGFILE
 
 VALIDATE $? "Installing dependencies"
 
-cp /home/centos/roboshop-shell/user.service /etc/systemd/system/user.service
+cp /home/centos/roboshop-shell/cart.service /etc/systemd/system/cart.service &>> $LOGFILE
 
-VALIDATE $? "copying user service file"
+VALIDATE $? "copying cart service file"
 
 systemctl daemon-reload &>> $LOGFILE
 
-VALIDATE $? "user daemon reload"
+VALIDATE $? "cart daemon reload"
 
-systemctl enable user &>> $LOGFILE
+systemctl enable cart &>> $LOGFILE
 
-VALIDATE $? "enable user"
+VALIDATE $? "enable cart"
 
-systemctl start user &>> $LOGFILE
+systemctl start cart &>> $LOGFILE
 
-VALIDATE $? "start user"
-
-cp /home/centos/roboshop-shell/mongo.repo /etc/yum.repos.d/mongo.repo
-
-VALIDATE $? "installing mongo.repo"
-
-dnf install mongodb-org-shell -y &>> $LOGFILE
-
-VALIDATE $? "installing mongoDB client"
-
-mongo --host MONGODB-SERVER-IPADDRESS </app/schema/user.js &>> $LOGFILE
-
-VALIDATE $? "Loading user data into MongoDb"
+VALIDATE $? "start cart"
