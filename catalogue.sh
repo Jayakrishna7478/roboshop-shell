@@ -93,6 +93,6 @@ dnf install mongodb-org-shell -y &>> $LOGFILE
 
 VALIDATE $? "installing mongoDB client"
 
-mongo --host MONGODB-SERVER-IPADDRESS </app/schema/catalogue.js &>> $LOGFILE
+mongo --host mongodb.kubernete.online </app/schema/catalogue.js &>> $LOGFILE
 
 VALIDATE $? "Loading catalogue data into MongoDb"
