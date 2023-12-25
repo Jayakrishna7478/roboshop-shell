@@ -41,7 +41,7 @@ dnf install nodejs -y &>> $LOGFILE
 
 VALIDATE $? "Installing NodeJS:18"
 
-id roboshop
+id roboshop #if roboshop user does not exist, then it is failure
 if [ $? -ne 0 ]
 then
     useradd roboshop
@@ -68,6 +68,7 @@ npm install &>> $LOGFILE
 
 VALIDATE $? "Installing dependencies"
 
+# use absolute, because cart.service exists there
 cp /home/centos/roboshop-shell/cart.service /etc/systemd/system/cart.service &>> $LOGFILE
 
 VALIDATE $? "copying cart service file"
